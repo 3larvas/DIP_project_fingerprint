@@ -12,3 +12,5 @@ int main() {
     waitKey(0);
     return 0;
 }
+
+// 작업을해요 
