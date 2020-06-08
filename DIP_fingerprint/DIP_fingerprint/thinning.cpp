@@ -65,6 +65,7 @@ void thinningIteration(cv::Mat& img, int iter)
 
 		for (x = 1; x < img.cols - 1; ++x) {
 			// shift col pointers left by one (scan left to right)
+			// 주소 저장으로 이해하기
 			nw = no;
 			no = ne;
 			ne = &(pAbove[x + 1]);
@@ -82,17 +83,21 @@ void thinningIteration(cv::Mat& img, int iter)
 				(*we == 0 && *nw == 1) + (*nw == 0 && *no == 1);
 			// B : P1(가운데 픽셀) 의 검은색인 이웃픽셀의 수
 			int B = *no + *ne + *ea + *se + *so + *sw + *we + *nw;
-			// m1 : P2 P4 P6 중 하나 이상이 흰색 : P2 P4 P8 중 하나 이상이 흰색
-			// m2 : P4 P6 P8 중 하나 이상이 흰색 : P2 P6 P8 중 하나 이상이 흰색 
+			// m1 : P2 P4 P6 중 하나 이상이 흰색(1단계) : P2 P4 P8 중 하나 이상이 흰색(2단계)
+			// m2 : P4 P6 P8 중 하나 이상이 흰색(1단계) : P2 P6 P8 중 하나 이상이 흰색 (2단계)
 			int m1 = iter == 0 ? (*no * *ea * *so) : (*no * *ea * *we);
 			int m2 = iter == 0 ? (*ea * *so * *we) : (*no * *so * *we);
 
+			// 1단계와 2단계의 조건 
+			// 1. 2<=B<=6 
+			// 2. A = 1 
+			// 3. m1 + m2
 			if (A == 1 && (B >= 2 && B <= 6) && m1 == 0 && m2 == 0)
 				pDst[x] = 1;
 		}
 	}
 
-	img &= ~marker;
+	img &= ~marker; // AND 연산자  즉 marker의 역을 and 연산 해서 img에 저장
 }
 
 
@@ -102,7 +107,8 @@ Mat thinning(const cv::Mat& src)
 	dst = src.clone();
 	dst /= 255;         // convert to binary image
 
-	cv::Mat prev = cv::Mat::zeros(dst.size(), CV_8UC1);
+	// zeros : 모두 0으로 구성된 배열 생성
+	cv::Mat prev = cv::Mat::zeros(dst.size(), CV_8UC1); 
 	cv::Mat diff;
 
 	do {
@@ -112,6 +118,7 @@ Mat thinning(const cv::Mat& src)
 		thinningIteration(dst, 1);
 		// absdiff : dst - prev = diff 즉 픽셀의 변화량
 		cv::absdiff(dst, prev, diff);
+		// dst 결과 값을 prev에 저장
 		dst.copyTo(prev);
 	} while (cv::countNonZero(diff) > 0);
 
