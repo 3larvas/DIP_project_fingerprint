@@ -33,16 +33,19 @@ void thinningIteration(cv::Mat& img, int iter)
 	uchar* pAbove; // 윗 행
 	uchar* pCurr; // 중간 행
 	uchar* pBelow; // 아랫 행
-	uchar* nw, * no, * ne;    // north (pAbove) // 9배열 표현
+	uchar* nw, * no, * ne;    // north (pAbove) // 9개의 배열 표현
 	uchar* we, * me, * ea;
 	uchar* sw, * so, * se;    // south (pBelow)
 
-	uchar* pDst;
+	uchar* pDst; // 결과값
 
 	// initialize row pointers
+
+	//아래 링크 img.ptr설명 
+	//https://riptutorial.com/ko/opencv/example/9922/cv----mat----ptr%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-%ED%9A%A8%EC%9C%A8%EC%A0%81%EC%9D%B8-%ED%94%BD%EC%85%80-%EC%95%A1%EC%84%B8%EC%8A%A4--t--%EB%B0%94%EB%8A%98 
 	pAbove = NULL;
-	pCurr = img.ptr<uchar>(0);
-	pBelow = img.ptr<uchar>(1);
+	pCurr = img.ptr<uchar>(0); // 전체 이미지의 0번째행
+	pBelow = img.ptr<uchar>(1); // 전체 이미지의 1번째행 
 
 	for (y = 1; y < img.rows - 1; ++y) {
 		// shift the rows up by one
@@ -72,11 +75,15 @@ void thinningIteration(cv::Mat& img, int iter)
 			so = se;
 			se = &(pBelow[x + 1]);
 
+			// A : P2 -> P3 -> P4 -> P5 -> P6 -> P7 -> P8 -> P9 -> P2 순서로 색전환 횟수(0->1)
 			int A = (*no == 0 && *ne == 1) + (*ne == 0 && *ea == 1) +
 				(*ea == 0 && *se == 1) + (*se == 0 && *so == 1) +
 				(*so == 0 && *sw == 1) + (*sw == 0 && *we == 1) +
 				(*we == 0 && *nw == 1) + (*nw == 0 && *no == 1);
+			// B : P1(가운데 픽셀) 의 검은색인 이웃픽셀의 수
 			int B = *no + *ne + *ea + *se + *so + *sw + *we + *nw;
+			// m1 : P2 P4 P6 중 하나 이상이 흰색 : P2 P4 P8 중 하나 이상이 흰색
+			// m2 : P4 P6 P8 중 하나 이상이 흰색 : P2 P6 P8 중 하나 이상이 흰색 
 			int m1 = iter == 0 ? (*no * *ea * *so) : (*no * *ea * *we);
 			int m2 = iter == 0 ? (*ea * *so * *we) : (*no * *so * *we);
 
@@ -99,8 +106,11 @@ Mat thinning(const cv::Mat& src)
 	cv::Mat diff;
 
 	do {
+		// 1단계 
 		thinningIteration(dst, 0);
+		// 2단계
 		thinningIteration(dst, 1);
+		// absdiff : dst - prev = diff 즉 픽셀의 변화량
 		cv::absdiff(dst, prev, diff);
 		dst.copyTo(prev);
 	} while (cv::countNonZero(diff) > 0);
