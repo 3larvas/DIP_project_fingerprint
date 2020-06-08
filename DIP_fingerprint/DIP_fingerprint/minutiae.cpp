@@ -13,17 +13,29 @@ using namespace std;
 using namespace cv;
 
 vector<Minutiae> findMinutiae(Mat& img, Mat& seg) {
-	CV_Assert(img.channels() == 1);
-	CV_Assert(img.depth() != sizeof(uchar));
-	CV_Assert(img.rows > 3 && img.cols > 3);
+	// CV_Assert(조건) : 조건식이 거짓이면 예외를 발생시킨다.
+	try {
+		CV_Assert(img.channels() == 1);
+		CV_Assert(img.depth() != sizeof(uchar));
+		CV_Assert(img.rows > 3 && img.cols > 3);
+	}
+	catch (cv::Exception& e) {
+		const char* err_msg = e.what();
+		cout << "Exception(" << e.code << "):" << err_msg << endl;
+	}
 
+	// zeros : 모두 0으로 구성된 배열 생성
 	cv::Mat marker = cv::Mat::zeros(img.size(), CV_8UC1);
 
 
 	Mat area;
+	// seg의 데이터 타입을 area에 저장(복사)
 	seg.convertTo(area, CV_8UC1);
-	Mat mask = getStructuringElement(1, Size(3, 3), Point(1, 1));
-	dilate(area, area, mask, Point(-1, -1), 7);
+
+	// 사각형모양의 3 x 3  커널 생성 중심점 (1,1)
+	Mat mask = getStructuringElement(1, Size(3, 3), Point(1, 1)); // MORPH_RECT , MORPH_ELLIPSE , MORPH_CROSS
+	
+	dilate(area, area, mask, Point(-1, -1), 7); // 팽창(확장) src , dst , mask , 마스크의중심점(디폴트) , 7번 수행
 
 	int ending = 0;
 	int bifurcation = 0;

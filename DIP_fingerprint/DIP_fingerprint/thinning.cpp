@@ -24,6 +24,7 @@ void thinningIteration(cv::Mat& img, int iter)
 	int nRows = img.rows;
 	int nCols = img.cols;
 	// isContinuous : 각 행의 마지막에 공백없이 연속적으로 데이터가 저장되어있는지 확인
+	//https://www.it-swarm.dev/ko/c++/opencv%EC%97%90%EC%84%9C-%EB%A7%A4%ED%8A%B8%EB%A5%BC-%EB%B0%B0%EC%97%B4-%EB%B2%A1%ED%84%B0%EB%A1%9C-%EB%B3%80%ED%99%98/1048830333/
 	if (img.isContinuous()) {  // 데이터가 저장되어있으면 한 열로 표현 ex) [0][152 * 200]
 		nCols *= nRows;
 		nRows = 1;
