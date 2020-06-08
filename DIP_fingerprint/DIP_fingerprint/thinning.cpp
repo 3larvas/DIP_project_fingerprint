@@ -1,3 +1,8 @@
+//세선화(thinning) 알고리즘 
+//http://blog.daum.net/pg365/107 3종류의 세선화 알고리즘이 있다.
+
+//두팀 모두 3가지의 알고리즘 중 Zhang Suen(장 쑤엔) 세선화 알고리즘을 사용하였다.
+//https://rosettacode.org/wiki/Zhang-Suen_thinning_algorithm
 #include "thinning.h"
 
 #include <iostream>
@@ -9,26 +14,26 @@ using namespace std;
 using namespace cv;
 
 void thinningIteration(cv::Mat& img, int iter)
-{
+{	// CV_Assert(조건) : 조건식이 거짓이면 예외를 발생시킨다.
 	CV_Assert(img.channels() == 1);
-	CV_Assert(img.depth() != sizeof(uchar));
+	CV_Assert(img.depth() != sizeof(uchar)); // uchar 1byte 0~255
 	CV_Assert(img.rows > 3 && img.cols > 3);
 
-	cv::Mat marker = cv::Mat::zeros(img.size(), CV_8UC1);
+	cv::Mat marker = cv::Mat::zeros(img.size(), CV_8UC1); // 8UC1 : 8bit unsigned integer : uchar(0...255), C1 : 1 Channel 
 
 	int nRows = img.rows;
 	int nCols = img.cols;
-
-	if (img.isContinuous()) {
+	// isContinuous : 각 행의 마지막에 공백없이 연속적으로 데이터가 저장되어있는지 확인
+	if (img.isContinuous()) {  // 데이터가 저장되어있으면 한 열로 표현 ex) [0][152 * 200]
 		nCols *= nRows;
 		nRows = 1;
 	}
 
 	int x, y;
-	uchar* pAbove;
-	uchar* pCurr;
-	uchar* pBelow;
-	uchar* nw, * no, * ne;    // north (pAbove)
+	uchar* pAbove; // 윗 행
+	uchar* pCurr; // 중간 행
+	uchar* pBelow; // 아랫 행
+	uchar* nw, * no, * ne;    // north (pAbove) // 9배열 표현
 	uchar* we, * me, * ea;
 	uchar* sw, * so, * se;    // south (pBelow)
 
