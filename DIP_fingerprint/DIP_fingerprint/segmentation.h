@@ -6,4 +6,4 @@
 using namespace std;
 using namespace cv;
 
-Mat segmentation(Mat& ori_img);
+Mat segmentation(Mat& src, Mat& dst);

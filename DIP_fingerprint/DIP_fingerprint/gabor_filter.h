@@ -5,3 +5,6 @@
 
 using namespace std;
 using namespace cv;
+
+
+Mat gabor(Mat src, vector<pair<float, float>>& vec, int block_size);

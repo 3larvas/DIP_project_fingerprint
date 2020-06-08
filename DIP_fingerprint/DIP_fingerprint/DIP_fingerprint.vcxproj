@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="block_ori.cpp" />
+    <ClCompile Include="distance.cpp" />
     <ClCompile Include="gabor_filter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="minutiae.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="block_ori.h" />
+    <ClInclude Include="distance.h" />
     <ClInclude Include="gabor_filter.h" />
     <ClInclude Include="minutiae.h" />
     <ClInclude Include="segmentation.h" />
