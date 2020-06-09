@@ -10,36 +10,36 @@ using namespace std;
 using namespace cv;
 
 pair<Mat, vector<pair<float, float>>> orientation(Mat src, int size, bool coredelta) {
-	Mat inputImage = src;
+	Mat src_img = src;
 
-	inputImage.convertTo(inputImage, CV_32F, 1.0 / 255, 0);
+	src_img.convertTo(src_img, CV_32F, 1.0 / 255, 0);
 
-	medianBlur(inputImage, inputImage, 3);
+	medianBlur(src_img, src_img, 3);
 
 	int blockSize = size;
 
-	Mat fprintWithDirectionsSmoo = inputImage.clone();
-	Mat coredeltaPrint = inputImage.clone();
+	Mat fprintWithDirectionsSmoo = src_img.clone();
+	Mat coredeltaPrint = src_img.clone();
 	cvtColor(coredeltaPrint, coredeltaPrint, COLOR_GRAY2BGR);
 
-	Mat tmp(inputImage.size(), inputImage.type());
-	Mat coherence(inputImage.size(), inputImage.type());
+	Mat tmp(src_img.size(), src_img.type());
+	Mat coherence(src_img.size(), src_img.type());
 	Mat orientationMap = tmp.clone();
 
 	//Gradiants x and y
 	Mat grad_x, grad_y;
 
-	Sobel(inputImage, grad_x, inputImage.depth(), 1, 0, 3);
-	Sobel(inputImage, grad_y, inputImage.depth(), 0, 1, 3);
+	Sobel(src_img, grad_x, src_img.depth(), 1, 0, 3);
+	Sobel(src_img, grad_y, src_img.depth(), 0, 1, 3);
 
-	Mat Fx(inputImage.size(), inputImage.type()),
-		Fy(inputImage.size(), inputImage.type()),
+	Mat Fx(src_img.size(), src_img.type()),
+		Fy(src_img.size(), src_img.type()),
 		Fx_gauss,
 		Fy_gauss;
-	Mat smoothed(inputImage.size(), inputImage.type());
+	Mat smoothed(src_img.size(), src_img.type());
 
-	int width = inputImage.cols;
-	int height = inputImage.rows;
+	int width = src_img.cols;
+	int height = src_img.rows;
 	int blockH;
 	int blockW;
 

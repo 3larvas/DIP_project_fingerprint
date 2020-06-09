@@ -26,7 +26,13 @@ int main() {
 
 	// ############### STEP 3. SEGMENTATION      ###############
 	Mat segmented;
-	Mat segmented2 = segmentation(src, segmented);	
+	//Mat segmented2 = segmentation(src, segmented);	
+	Mat meanMask, varianceMask;
+	segmentation(src, 5, 5, 230, meanMask, varianceMask);   //block size is 5
+	Mat mask = meanMask & varianceMask;
+	dilate(mask, mask, Mat(), Point(-1, -1), 3, 0, BORDER_CONSTANT);
+	erode(mask, mask, Mat(), Point(-1, -1), 3, 0, BORDER_CONSTANT);
+	imshow("mask", mask);
 
 	// ############### STEP 4. BLOCK ORIENTATION ###############
 	pair<Mat, vector<pair<float, float>>> returned = orientation(src, block_size, false);
@@ -36,7 +42,7 @@ int main() {
 	Mat coredelta = returned2.first;
 
 	// ############### STEP 5. GABOR FILTER      ###############
-	Mat gabored = gabor(src, vec, block_size) + segmented2;
+	Mat gabored = gabor(src, vec, block_size);//+ segmented2;
 
 	// ############### STEP 6. BINARYIZATION     ###############
 	Mat gabored_end;
@@ -46,32 +52,32 @@ int main() {
 	Mat imgt = thinning(gabored_end);
 
 	// ############### STEP 7. DETECT MINUTIAE   ###############
-	Mat result = printMinutiae(imgt, segmented2, vec, block_size, size, src);
+	Mat result = printMinutiae(imgt, src/*segmented2*/, vec, block_size, size, src);
 	// measure distance between ridge
 	//calculate(imgt, segmented2);
 
-	//pyrUp(src, src);
-	//imshow("src", src);
+	pyrUp(src, src);
+	imshow("src", src);
 
-	//pyrUp(show, show);
-	//imshow("show", show);
+	pyrUp(show, show);
+	imshow("show", show);
 
 	//pyrUp(segmented2, segmented2);
 	//imshow("segmented area", segmented2);
 
-	//gabored.convertTo(gabored, CV_8U);
-	//pyrUp(gabored, gabored);
-	//imshow("gabored", gabored);
+	gabored.convertTo(gabored, CV_8U);
+	pyrUp(gabored, gabored);
+	imshow("gabored", gabored);
 
-	//imgt.convertTo(imgt, CV_8U);
-	//pyrUp(imgt, imgt);
-	//imshow("thinned", imgt);
+	imgt.convertTo(imgt, CV_8U);
+	pyrUp(imgt, imgt);
+	imshow("thinned", imgt);
 
-	//pyrUp(result, result);
-	//imshow("check", result);
+	pyrUp(result, result);
+	imshow("check", result);
 
-	//pyrUp(coredelta, coredelta);
-	//imshow("coredelta", coredelta);
+	pyrUp(coredelta, coredelta);
+	imshow("coredelta", coredelta);
 
 	waitKey(0);
 	return 0;

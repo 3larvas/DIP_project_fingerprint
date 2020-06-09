@@ -6,4 +6,4 @@
 using namespace std;
 using namespace cv;
 
-Mat segmentation(Mat& src, Mat& dst);
+void segmentation(Mat input, int blockSize, int blackT, int whiteT, Mat& meanMask, Mat& varMask);
