@@ -29,6 +29,9 @@ static vector<int> y_point;
 int main() {
 	// ############### STEP 1. READ FILE         ###############
 	Mat mat = imread("img/[1]_2019_8_4_L_I_1.bmp", IMREAD_GRAYSCALE); // READ INPUT IMAGE IN GRAY SCALE
+	//Mat mat = imread("img/[1_Im]_2019_8_4_R_I_1.bmp", IMREAD_GRAYSCALE); // READ INPUT IMAGE IN GRAY SCALE
+
+	
 	imshow("Original", mat);
 	I_width = mat.cols;
 	I_height = mat.rows;
@@ -77,8 +80,9 @@ int main() {
 	Mat show_thin = masked;
 	resize(show_thin, show_thin, Size(300, 400));
 	imshow("thinning", show_thin);
-	erode(mask, mask, Mat(), Point(-1, -1), 5, 0, BORDER_CONSTANT);
-
+	erode(mask, mask, Mat(), Point(-1, -1), 10, 0, BORDER_CONSTANT);
+	
+	imshow("mask_2", mask);
 	// ############### STEP 7. DETECT MINUTIAE   ###############
 	detect(masked, mask, orientationMap);
 	Mat show_dest = masked;

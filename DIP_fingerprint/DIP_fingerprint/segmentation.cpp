@@ -85,6 +85,21 @@ void Segmentation(Mat input, int blockSize, int blackT, int whiteT, Mat& meanMas
 						mask_var.at<uchar>(img_y + x, img_x + y) = 255;// 흰색으로 채움
 			}
 		}
+		// 좌측 상단 이미지 모서리부분(높이의 15%, 너비의 20% 부분을 마스크로 설정)
+		for (int img_x = 0; img_x < ori_img.cols*0.2; img_x++) {
+			for (int img_y = 0; img_y < ori_img.rows * 0.15 - img_x; img_y++) {
+				mask_mean.at<uchar>(img_y, img_x) = 0; // 검은색으로 채움
+				mask_var.at<uchar>(img_y, img_x) = 0;// 검은색으로 채움
+			}
+		}
+		// 우측 상단 이미지 모서리부분(높이의 15%, 너비의 20% 부분을 마스크로 설정)
+		for (int img_x = ori_img.cols * 0.8 ; img_x < ori_img.cols; img_x++) {
+			for (int img_y = 0; img_y < ori_img.rows * 0.15 - (ori_img.cols - img_x); img_y++) {
+				mask_mean.at<uchar>(img_y, img_x) = 0; // 검은색으로 채움
+				mask_var.at<uchar>(img_y, img_x) = 0;// 검은색으로 채움
+			}
+		}
+
 		segmented_m = mask_mean(Rect(0, 0, ori_img.cols, ori_img.rows)); // Mean mask
 		segmented_v = mask_var(Rect(0, 0, ori_img.cols, ori_img.rows));  // Variance mask
 
@@ -103,10 +118,8 @@ void Normalize(Mat& image)
 	double D = dev.val[0];
 
 	//Normalize image
-	for (int i(0); i < image.rows; i++)
-	{
-		for (int j(0); j < image.cols; j++)
-		{
+	for (int i(0); i < image.rows; i++){
+		for (int j(0); j < image.cols; j++){
 			if (image.at<float>(i, j) > M)
 				image.at<float>(i, j) = 100.0 / 255 + sqrt(100.0 / 255 * pow(image.at<float>(i, j) - M, 2) / D);
 			else
