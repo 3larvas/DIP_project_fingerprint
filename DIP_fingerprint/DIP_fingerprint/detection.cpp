@@ -10,6 +10,16 @@ vector<unsigned char> m_type;
 vector<int> x_point;
 vector<int> y_point;
 
+/*==============================================================================================*
+function : detect
+desc     : 
+		   
+parm
+	- minuiae	:  세선화 된(thinning) 입력영상
+	- mask		:  
+	- OrientMap	:  방향성을 갖춘 영상
+*==============================================================================================*/
+
 void detect(Mat& minutiae, Mat& mask, Mat& OrientMap)
 {
 	int end = 0, endcheck = 0;
@@ -40,10 +50,15 @@ void detect(Mat& minutiae, Mat& mask, Mat& OrientMap)
 					if ((minutiae.at<uchar>(x, y + 1)) != (minutiae.at<uchar>(x - 1, y + 1))) found++;
 					if ((minutiae.at<uchar>(x - 1, y + 1)) != (minutiae.at<uchar>(x - 1, y))) found++;
 					if ((minutiae.at<uchar>(x - 1, y)) != (minutiae.at<uchar>(x - 1, y - 1))) found++;
+					/*found = minutiae.at<uchar>(x - 1, y + 1)/255 + minutiae.at<uchar>(x, y + 1)/255 + minutiae.at<uchar>(x + 1, y + 1)/255 +
+							minutiae.at<uchar>(x - 1, y)/255										+ minutiae.at<uchar>(x + 1, y)/255 +
+							minutiae.at<uchar>(x - 1, y - 1)/255 + minutiae.at<uchar>(x, y - 1)/255 + minutiae.at<uchar>(x + 1, y - 1)/255;*/
 				}
 
 				if (found == 2) end = 1;
 				else if (found == 6) bif = 1;
+				//if (found == 1) end = 1;
+				//else if (found == 3) bif = 1;
 
 				//for make bin file
 				if (end || bif) {
@@ -71,7 +86,9 @@ void detect(Mat& minutiae, Mat& mask, Mat& OrientMap)
 			}
 		}
 	}
-	imshow("minutiae_color", color2);
+	Mat show_color2 = color2;
+	resize(show_color2, show_color2, Size(300, 400));
+	imshow("Check_Minutiae", show_color2);
 	N_minutiae = endcheck + bifcheck;   //all minutiae number
 	cout << "end point Num : " << endcheck << endl;
 	cout << "bif point Num : " << bifcheck << endl;
