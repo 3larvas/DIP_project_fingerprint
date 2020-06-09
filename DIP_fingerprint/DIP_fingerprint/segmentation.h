@@ -6,4 +6,5 @@
 using namespace std;
 using namespace cv;
 
-void segmentation(Mat input, int blockSize, int blackT, int whiteT, Mat& meanMask, Mat& varMask);
+void Segmentation(Mat input, int blockSize, int blackT, int whiteT, Mat& meanMask, Mat& varMask);
+void Normalize(Mat& image);

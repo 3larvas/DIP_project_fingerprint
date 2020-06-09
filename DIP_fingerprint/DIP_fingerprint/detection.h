@@ -12,5 +12,4 @@
 using namespace cv;
 using namespace std;
 
-int distance(Mat& src, Point& pt1, Point& pt2);
-void calculate(Mat imgt, Mat src);
+void detect(Mat& minutiae, Mat& mask, Mat& OrientMap);

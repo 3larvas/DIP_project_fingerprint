@@ -6,5 +6,5 @@
 using namespace std;
 using namespace cv;
 
-void thinningIteration(cv::Mat& img, int iter);
-Mat thinning(const cv::Mat& src);
+void thinningIteration(cv::Mat& im, int iter);
+void thinning(cv::Mat& im);

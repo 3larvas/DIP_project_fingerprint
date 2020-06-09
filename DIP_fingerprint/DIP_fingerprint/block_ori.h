@@ -6,4 +6,5 @@
 using namespace std;
 using namespace cv;
 
-pair<Mat, vector<pair<float, float>>> orientation(Mat src, int size = 8, bool coredelta = false);
+void orientation(const Mat& inputImage, Mat& orientationMap, int blockSize);
+void enhancement(const Mat& inputImage, Mat& orientationMap, int blockSize, Mat& dst);

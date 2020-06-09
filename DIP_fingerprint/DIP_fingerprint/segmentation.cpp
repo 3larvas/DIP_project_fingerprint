@@ -1,5 +1,4 @@
 #include "segmentation.h"
-
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
@@ -19,9 +18,9 @@ parm
 	- meanMask	: mean 연산으로 생성된 mask
 	- varMask	: variance 연산으로 생성된 mask
 *==============================================================================================*/
-void segmentation(Mat input, int blockSize, int blackT, int whiteT, Mat& meanMask, Mat& varMask) {
+void Segmentation(Mat input, int blockSize, int blackT, int whiteT, Mat& meanMask, Mat& varMask) {
 	Mat ori_img = input.clone();
-	int sg_blockSize = blockSize;   //segment blocksize
+	int sg_blockSize = blockSize;  
 	Mat mask_mean, mask_var;		//Mean mask , Variance mask
 
 	//zero-padding
@@ -35,7 +34,7 @@ void segmentation(Mat input, int blockSize, int blackT, int whiteT, Mat& meanMas
 		for (int img_y = 0; img_y < ori_img.rows; img_y += sg_blockSize) {
 			Mat sg_block = mask_mean(Rect(img_x, img_y, sg_blockSize, sg_blockSize));
 
-			//calculate mean
+			//mean 값 계산
 			int pixelCount = 0;
 			int mask_meanean = 0;
 			for (int x = 0; (x < sg_blockSize) && (img_y + x < ori_img.rows); x++) {
@@ -46,7 +45,7 @@ void segmentation(Mat input, int blockSize, int blackT, int whiteT, Mat& meanMas
 			}
 			mask_meanean = mask_meanean / pixelCount;
 
-			//calculate variance
+			//variance 값 계산
 			int mask_varariance = 0;
 			int sg_dev = 0;
 			for (int x = 0; (x < sg_blockSize) && (img_y + x < ori_img.rows); x++) {
@@ -59,44 +58,60 @@ void segmentation(Mat input, int blockSize, int blackT, int whiteT, Mat& meanMas
 			}
 			mask_varariance = mask_varariance / pixelCount;
 
-			//Mean fill in Matrix
-			//black (0)
-			if (mask_meanean > whiteT /*|| mask_meanean < blackT*/){
+			//Mean 값을 임계치와 비교
+			if (mask_meanean > whiteT){
 				for (int x = 0; (x < sg_blockSize) && (img_y + x < ori_img.rows); x++) 
 					for (int y = 0; (y < sg_blockSize) && (img_x + y < ori_img.cols); y++) 
-						mask_mean.at<uchar>(img_y + x, img_x + y) = 0;
+						mask_mean.at<uchar>(img_y + x, img_x + y) = 0; // 검은색으로 채움
 			}
-			//white (255)
 			else {
 				for (int x = 0; (x < sg_blockSize) && (img_y + x < ori_img.rows); x++) 
 					for (int y = 0; (y < sg_blockSize) && (img_x + y < ori_img.cols); y++) 
-						mask_mean.at<uchar>(img_y + x, img_x + y) = 255;
+						mask_mean.at<uchar>(img_y + x, img_x + y) = 255; // 흰색으로 채움
 			}
 
-			//variance fill in image
-			//black (0)
+			//Mean 값을 임계치와 비교
 			if (mask_varariance < blackT){
 				for (int x = 0; (x < sg_blockSize) && (img_y + x < ori_img.rows); x++) {
 					for (int y = 0; (y < sg_blockSize) && (img_x + y < ori_img.cols); y++) {
-						mask_var.at<uchar>(img_y + x, img_x + y) = 0;
+						mask_var.at<uchar>(img_y + x, img_x + y) = 0;// 검은색으로 채움
 					}
 				}
 			}
 			//white (255)
 			else {
-				for (int x = 0; (x < sg_blockSize) && (img_y + x < ori_img.rows); x++) {
-					for (int y = 0; (y < sg_blockSize) && (img_x + y < ori_img.cols); y++) {
-						mask_var.at<uchar>(img_y + x, img_x + y) = 255;
-					}
-				}
+				for (int x = 0; (x < sg_blockSize) && (img_y + x < ori_img.rows); x++) 
+					for (int y = 0; (y < sg_blockSize) && (img_x + y < ori_img.cols); y++) 
+						mask_var.at<uchar>(img_y + x, img_x + y) = 255;// 흰색으로 채움
 			}
-
 		}
 		segmented_m = mask_mean(Rect(0, 0, ori_img.cols, ori_img.rows)); // Mean mask
-		segmented_v = mask_var(Rect(0, 0, ori_img.cols, ori_img.rows)); // Variance mask
+		segmented_v = mask_var(Rect(0, 0, ori_img.cols, ori_img.rows));  // Variance mask
 
 		meanMask = segmented_m;
 		varMask = segmented_v;
+	}
+}
+
+void Normalize(Mat& image)
+{
+	Scalar mean, dev;
+
+	meanStdDev(image, mean, dev, noArray());   //calculate mean and StdDev
+
+	double M = mean.val[0];
+	double D = dev.val[0];
+
+	//Normalize image
+	for (int i(0); i < image.rows; i++)
+	{
+		for (int j(0); j < image.cols; j++)
+		{
+			if (image.at<float>(i, j) > M)
+				image.at<float>(i, j) = 100.0 / 255 + sqrt(100.0 / 255 * pow(image.at<float>(i, j) - M, 2) / D);
+			else
+				image.at<float>(i, j) = 100.0 / 255 - sqrt(100.0 / 255 * pow(image.at<float>(i, j) - M, 2) / D);
+		}
 	}
 }
 
