@@ -151,17 +151,13 @@
   <ItemGroup>
     <ClCompile Include="block_ori.cpp" />
     <ClCompile Include="detection.cpp" />
-    <ClCompile Include="gabor_filter.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="minutiae.cpp" />
     <ClCompile Include="segmentation.cpp" />
     <ClCompile Include="thinning.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="block_ori.h" />
     <ClInclude Include="detection.h" />
-    <ClInclude Include="gabor_filter.h" />
-    <ClInclude Include="minutiae.h" />
     <ClInclude Include="segmentation.h" />
     <ClInclude Include="thinning.h" />
   </ItemGroup>
