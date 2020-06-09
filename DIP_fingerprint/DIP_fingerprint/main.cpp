@@ -29,7 +29,9 @@ static vector<int> y_point;
 int main() {
 	// ############### STEP 1. READ FILE         ###############
 	Mat mat = imread("img/[1]_2019_8_4_L_I_1.bmp", IMREAD_GRAYSCALE); // READ INPUT IMAGE IN GRAY SCALE
-	imshow("Original", mat);
+	Mat img_original = mat;
+	resize(img_original, img_original, Size(300, 400));
+	imshow("img_original", img_original);
 	I_width = mat.cols;
 	I_height = mat.rows;
 
@@ -39,14 +41,20 @@ int main() {
 	Mat mask = meanMask & varianceMask;
 	dilate(mask, mask, Mat(), Point(-1, -1), 3, 0, BORDER_CONSTANT);
 	erode(mask, mask, Mat(), Point(-1, -1), 3, 0, BORDER_CONSTANT);
-	imshow("mask", mask);
+	Mat mask_original = mask;
+	resize(mask_original, mask_original, Size(300, 400));
+	imshow("mask_original", mask_original);
 
 	// ############### STEP 2. NORMALIZATION     ###############
 	equalizeHist(mat, mat);
-	imshow("EqualizeHistogram", mat);
+	Mat img_Equalize = mat;
+	resize(img_Equalize, img_Equalize, Size(300, 400));
+	imshow("EqualizeHistogram", img_Equalize);
 	mat.convertTo(mat, CV_32F, 1.0 / 255, 0);   //type : uchar -> float / scale 0~1
 	Normalize(mat);
-	imshow("Normalize", mat);
+	Mat img_Normailze = mat;
+	resize(img_Normailze, img_Normailze, Size(300, 400));
+	imshow("Normalize", img_Normailze);
 
 	// ############### STEP 4. BLOCK ORIENTATION & GABOR FILTER###############
 	int blockSize = 15; // SPECIFY THE BLOCKSIZE;
@@ -55,7 +63,9 @@ int main() {
 	Mat orientationMap;
 	Mat dst;
 	enhancement(mat, orientationMap, blockSize, dst);
-	imshow("Enhancement", dst);
+	Mat img_enhancement = dst;
+	resize(img_enhancement, img_enhancement, Size(300, 400));
+	imshow("Enhancement", img_enhancement);
 	Mat orien, coreMap, deltaMap;
 	
 	// ############### STEP 6. BINARYIZATION     ###############
