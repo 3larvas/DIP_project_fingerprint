@@ -73,7 +73,7 @@ void detect(Mat& minutiae, Mat& mask, Mat& OrientMap)
 
 				if ((end)) {
 					Point pt1 = Point(y, x);
-					circle(color2, pt1, 3, Scalar(255, 0, 0), 1, 8, 0);   //blue circle
+					circle(color2, pt1, 3, Scalar(51, 255, 255), 1, 8, 0);   //yellow circle
 					end = 0;
 					endcheck++;
 				}
