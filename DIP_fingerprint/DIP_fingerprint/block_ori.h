@@ -6,5 +6,4 @@
 using namespace std;
 using namespace cv;
 
-void orientation(const Mat& inputImage, Mat& orientationMap, int blockSize);
-void enhancement(const Mat& inputImage, Mat& orientationMap, int blockSize, Mat& dst);
+void enhancement(const Mat& ori_img, Mat& orient_map, int block_size, Mat& dst_img, bool show_yn);

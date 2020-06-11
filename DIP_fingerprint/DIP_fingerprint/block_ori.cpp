@@ -19,7 +19,7 @@ parm
 	- block_size	: 방향값을 계산하기위한 블럭의 단위 픽셀
 	- dst_img		: 연산결과 이미지로 gabor filter가 적용된 모습이다.
 *==============================================================================================*/
-void enhancement(const Mat& ori_img, Mat& orient_map, int block_size, Mat& dst_img){
+void enhancement(const Mat& ori_img, Mat& orient_map, int block_size, Mat& dst_img, bool show_yn){
 	Mat dir_smo = ori_img.clone();//copy
 	Mat tmp(ori_img.size(), ori_img.type()); //make matrix equal size and equal type with ori_img
 	Mat coherence(ori_img.size(), ori_img.type());
@@ -140,12 +140,14 @@ void enhancement(const Mat& ori_img, Mat& orient_map, int block_size, Mat& dst_i
 
 	src3.convertTo(src3, CV_8U, 255, 0);   //0~255 scale
 	dst_img = src3;
-	
-	Mat show_smoo = smoothed;
-	resize(show_smoo, show_smoo, Size(300, 400));
-	imshow("show_smoo", show_smoo);
-
-	Mat show_dir = dir_smo;
-	resize(show_dir, show_dir, Size(300, 400));
-	imshow("show_dir", show_dir);
+	if (show_yn) {
+		Mat show_smoo = smoothed;
+		resize(show_smoo, show_smoo, Size(300, 400));
+		imshow("show_smoo", show_smoo);
+	}
+	if (show_yn) {
+		Mat show_dir = dir_smo;
+		resize(show_dir, show_dir, Size(300, 400));
+		imshow("show_dir", show_dir);
+	}
 }

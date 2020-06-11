@@ -1,8 +1,6 @@
 #include "detection.h"
 //variable for making bin file 
-int Num_minutiae;   //manutiae Number
-int I_width;   //image width
-int I_height;   //image height
+int num_minutiae;   //manutiae Number
 float angle_;
 vector<unsigned char> m_angle;
 vector<unsigned char> m_type;
@@ -17,7 +15,7 @@ parm
 	- mask		:  세그멘테이션 필터
 	- OrientMap	:  Make bin file
 *==============================================================================================*/
-void detect(Mat& minutiae, Mat& mask, Mat& OrientMap)
+void detect(Mat& minutiae, Mat& mask, Mat& OrientMap, bool show_yn, String file_bin, int img_w, int img_h)
 {
 	int end = 0;
 	int endcheck = 0;
@@ -80,20 +78,33 @@ void detect(Mat& minutiae, Mat& mask, Mat& OrientMap)
 			}
 		}
 	}
-	Mat show_checked = checked;
-	resize(show_checked, show_checked, Size(300, 400));
-	imshow("Check_Minutiae", show_checked);
-	Num_minutiae = endcheck + bifcheck;   //all minutiae number
+	if (show_yn) {
+		Mat show_checked = checked;
+		resize(show_checked, show_checked, Size(300, 400));
+		imshow("Check_Minutiae", show_checked);
+	}
+	num_minutiae = endcheck + bifcheck;   //all minutiae number
 	cout << "End point Num : " << endcheck << endl;
 	cout << "Bifufcation point Num : " << bifcheck << endl;
-	cout << "minutiae of Number: " << Num_minutiae << endl;
+	cout << "minutiae of Number: " << num_minutiae << endl;
 
-	int limit = 0;
+	int zero = 0;
+	ofstream output(file_bin, ios::out | ios::binary);
+	output.write((char*)&img_w, sizeof(int));
+	output.write((char*)&img_h, sizeof(int));
+	output.write((char*)&num_minutiae, sizeof(int));
+	output.write((char*)&zero, sizeof(int));
 
-	for (int i = 0; i < Num_minutiae; i++) {
-		if (i + limit >= 50) break;
-		printf("X[%d]: %d Y[%d]: %d O[%d]: %d T[%d]: %d\n", i, x_point[i], i, y_point[i], i, m_angle[i], i, m_type[i]);
+	for (int i = 0; i < num_minutiae; i++) {
+	   if (i >= 50) break;
+	   printf("X[%d]: %d Y[%d]: %d O[%d]: %d T[%d]: %d\n", i, x_point[i], i, y_point[i], i, m_angle[i], i, m_type[i]);
+	   output.write((char*)&x_point[i], sizeof(int));
+	   output.write((char*)&y_point[i], sizeof(int));
+	   output.write((char*)&m_angle[i], sizeof(char));
+	   output.write((char*)&m_type[i], sizeof(char));
 	}
+	output.close();
+
 
 }
 

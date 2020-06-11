@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="block_ori.h" />
     <ClInclude Include="detection.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="segmentation.h" />
     <ClInclude Include="thinning.h" />
   </ItemGroup>
