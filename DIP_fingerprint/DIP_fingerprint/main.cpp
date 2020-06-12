@@ -12,9 +12,13 @@ int main() {
 		String file_nm = file_nm_list[t];
 		String file_img = "img/" + file_nm + ".bmp";
 		String file_bin = "bin/" + file_nm + ".bin";
+		String file_res = "result/" + file_nm + "_result.bmp";
+
 
 		// ############### STEP 1. READ FILE         ###############
 		Mat mat = imread(file_img, IMREAD_GRAYSCALE); // READ INPUT IMAGE IN GRAY SCALE
+		GaussianBlur(mat, mat, Size(3, 3), 1, 1);
+
 		Mat img_original = mat;
 		if (show_yn) {
 			resize(img_original, img_original, Size(300, 400));
@@ -49,7 +53,7 @@ int main() {
 		}
 
 		// ############### STEP 4. BLOCK ORIENTATION & GABOR FILTER###############
-		int blockSize = 30; // SPECIFY THE BLOCKSIZE;
+		int blockSize = 15; // SPECIFY THE BLOCKSIZE;
 		int height = mat.rows;
 		int width = mat.cols;
 		Mat orientationMap;
@@ -90,7 +94,7 @@ int main() {
 		erode(mask, mask, Mat(), Point(-1, -1), 5, 0, BORDER_CONSTANT);
 
 		// ############### STEP 8. DETECT MINUTIAE   ###############
-		detect(masked, mask, orientationMap, show_yn, file_bin, i_width, i_height);
+		detect(masked, mask, orientationMap, show_yn, file_bin, file_res, i_width, i_height);
 		if (show_yn) {
 			Mat show_dest = masked;
 			resize(show_dest, show_dest, Size(300, 400));

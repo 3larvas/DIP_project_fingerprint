@@ -12,4 +12,4 @@
 using namespace cv;
 using namespace std;
 
-void detect(Mat& minutiae, Mat& mask, Mat& OrientMap, bool show_yn, String file_bin, int img_w, int img_h);
+void detect(Mat& minutiae, Mat& mask, Mat& OrientMap, bool show_yn, String file_bin, String file_img, int img_w, int img_h);
