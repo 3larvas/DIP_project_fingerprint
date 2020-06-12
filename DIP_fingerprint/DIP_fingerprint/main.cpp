@@ -4,10 +4,10 @@
 using namespace std;
 using namespace cv;
 
-bool show_yn = false;
+bool show_yn = true;
 
 int main() {
-	for (int t = 0; t < 40; t++) {
+	for (int t = 1; t < 2; t++) {
 		printf("[%d] image start process!!\n", t);
 		String file_nm = file_nm_list[t];
 		String file_img = "img/" + file_nm + ".bmp";
@@ -41,7 +41,7 @@ int main() {
 		resize(img_Equalize, img_Equalize, Size(300, 400));
 		if (show_yn) imshow("EqualizeHistogram", img_Equalize);
 		mat.convertTo(mat, CV_32F, 1.0 / 255, 0);   //type : uchar -> float / scale 0~1
-		Normalize(mat);
+		//Normalize(mat);
 		if (show_yn) {
 			Mat img_Normailze = mat;
 			resize(img_Normailze, img_Normailze, Size(300, 400));
@@ -49,7 +49,7 @@ int main() {
 		}
 
 		// ############### STEP 4. BLOCK ORIENTATION & GABOR FILTER###############
-		int blockSize = 30; // SPECIFY THE BLOCKSIZE;
+		int blockSize = 8; // SPECIFY THE BLOCKSIZE;
 		int height = mat.rows;
 		int width = mat.cols;
 		Mat orientationMap;
