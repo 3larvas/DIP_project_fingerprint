@@ -15,7 +15,7 @@ parm
 	- mask		:  세그멘테이션 필터
 	- OrientMap	:  Make bin file
 *==============================================================================================*/
-void detect(Mat& minutiae, Mat& mask, Mat& OrientMap, bool show_yn, String file_bin, int img_w, int img_h)
+void detect(Mat& minutiae, Mat& mask, Mat& OrientMap, bool show_yn, String file_bin, String file_img, int img_w, int img_h)
 {
 	int end = 0;
 	int endcheck = 0;
@@ -87,7 +87,14 @@ void detect(Mat& minutiae, Mat& mask, Mat& OrientMap, bool show_yn, String file_
 	cout << "End point Num : " << endcheck << endl;
 	cout << "Bifufcation point Num : " << bifcheck << endl;
 	cout << "minutiae of Number: " << num_minutiae << endl;
+	Scalar blue(255, 50, 255);
+	string txt = "E : " + to_string(endcheck)  + " B : " + to_string(bifcheck);
+	putText(checked, txt, Point(0, 20), FONT_HERSHEY_PLAIN, 1, blue, 2);
+	txt = "T : " + to_string(endcheck + bifcheck);
+	putText(checked, txt, Point(0, 40), FONT_HERSHEY_PLAIN, 1, blue, 2);
 
+
+	imwrite(file_img, checked);
 	int zero = 0;
 	ofstream output(file_bin, ios::out | ios::binary);
 	output.write((char*)&img_w, sizeof(int));
@@ -97,7 +104,7 @@ void detect(Mat& minutiae, Mat& mask, Mat& OrientMap, bool show_yn, String file_
 
 	for (int i = 0; i < num_minutiae; i++) {
 	   if (i >= 50) break;
-	   printf("X[%d]: %d Y[%d]: %d O[%d]: %d T[%d]: %d\n", i, x_point[i], i, y_point[i], i, m_angle[i], i, m_type[i]);
+	   // printf("X[%d]: %d Y[%d]: %d O[%d]: %d T[%d]: %d\n", i, x_point[i], i, y_point[i], i, m_angle[i], i, m_type[i]);
 	   output.write((char*)&x_point[i], sizeof(int));
 	   output.write((char*)&y_point[i], sizeof(int));
 	   output.write((char*)&m_angle[i], sizeof(char));
