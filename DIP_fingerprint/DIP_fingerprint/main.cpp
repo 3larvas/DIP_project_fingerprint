@@ -8,7 +8,7 @@ bool show_yn = false;
 
 int main() {
 	for (int t = 0; t < 40; t++) {
-		printf("[%d] image start process!!\n", t);
+		//printf("[%d] image start process!!\n", t);
 		String file_nm = file_nm_list[t];
 		String file_img = "img/" + file_nm + ".bmp";
 		String file_bin = "bin/" + file_nm + ".bin";
