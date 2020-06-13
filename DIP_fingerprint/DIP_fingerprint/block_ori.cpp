@@ -114,7 +114,8 @@ void enhancement(const Mat& ori_img, Mat& orient_map, int block_size, Mat& dst_i
 	copyMakeBorder(stemp, stemp, special, special, special, special, BORDER_REFLECT);
 
 	// gabor filter parameter 
-	double sig = 9, lm = 7.2, gm = 0.02, ps = 0;
+	//double sig = 9, lm = 7.2, gm = 0.02, ps = 0; // 기존값
+	double sig = 5, lm = 7, gm = 1, ps = 0; // 시그마 , 람다 , γ 감마(가로세로 비율 대부분1 작아질수록 타원) , ψ 프시 :0 고정
 	double theta;
 	float ffi;
 
@@ -122,6 +123,10 @@ void enhancement(const Mat& ori_img, Mat& orient_map, int block_size, Mat& dst_i
 	for (int m = special; m < temp.rows - special; m++) {
 		for (int n = special; n < temp.cols - special; n++) {
 			theta = stemp.at<float>(m, n);
+			//int ln = sqrt(2 * pow(block_size, 2)) / 2;
+			//float dx = ln * cos(stemp.at<float>(m, n) - CV_PI / 2);
+			//float dy = ln * sin(stemp.at<float>(m, n) - CV_PI / 2);
+			//theta = atan2f(dy, dx) + CV_PI / 2;
 			kernel3 = getGaborKernel(Size(kernel_size, kernel_size), sig, theta, lm, gm, ps, CV_32F);
 			ffi = 0;
 			for (int k = 0; k < kernel_size; k++) {
