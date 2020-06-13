@@ -84,10 +84,10 @@ void detect(Mat& minutiae, Mat& mask, Mat& OrientMap, bool show_yn, String file_
 		imshow("Check_Minutiae", show_checked);
 	}
 	num_minutiae = endcheck + bifcheck;   //all minutiae number
-	cout << "End point Num : " << endcheck << endl;
+	/*cout << "End point Num : " << endcheck << endl;
 	cout << "Bifufcation point Num : " << bifcheck << endl;
-	cout << "minutiae of Number: " << num_minutiae << endl;
-	cout << endcheck << endl;
+	cout << "minutiae of Number: " << num_minutiae << endl;*/
+	//cout << endcheck << endl;
 	cout << bifcheck << endl;
 	Scalar blue(255, 50, 255);
 	string txt = "E : " + to_string(endcheck)  + " B : " + to_string(bifcheck);
