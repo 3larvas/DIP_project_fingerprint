@@ -4,10 +4,10 @@
 using namespace std;
 using namespace cv;
 
-bool show_yn = false;
+bool show_yn = true;
 
 int main() {
-	for (int t = 0; t < 40; t++) {
+	for (int t = 7; t < 8; t++) {
 		//printf("[%d] image start process!!\n", t);
 		String file_nm = file_nm_list[t];
 		String file_img = "img/" + file_nm + ".bmp";

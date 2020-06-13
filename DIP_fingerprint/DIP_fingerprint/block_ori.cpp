@@ -101,7 +101,7 @@ void enhancement(const Mat& ori_img, Mat& orient_map, int block_size, Mat& dst_i
 	Mat kernel3;
 	Mat src3 = ori_img.clone();
 
-	int kernel_size = 7; //gabor filter kernel size
+	int kernel_size = 5; //gabor filter kernel size
 	int special = (kernel_size - 1) / 2;
 
 	//padding source image
@@ -114,8 +114,8 @@ void enhancement(const Mat& ori_img, Mat& orient_map, int block_size, Mat& dst_i
 	copyMakeBorder(stemp, stemp, special, special, special, special, BORDER_REFLECT);
 
 	// gabor filter parameter 
-	//double sig = 9, lm = 7.2, gm = 0.02, ps = 0; // 기존값
-	double sig = 5, lm = 7, gm = 1, ps = 0; // 시그마 , 람다 , γ 감마(가로세로 비율 대부분1 작아질수록 타원) , ψ 프시 :0 고정
+	double sig = 9, lm = 6.28, gm = 0.02, ps = 0; // 기존값
+	//double sig = 5, lm = 7, gm = 1, ps = 0; // 시그마 , 람다 , γ 감마(가로세로 비율 대부분1 작아질수록 타원) , ψ 프시 :0 고정
 	double theta;
 	float ffi;
 
